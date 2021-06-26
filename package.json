@@ -1,6 +1,5 @@
 {
   "name": "diabotes",
-  "type": "module",
   "version": "1.0.0",
   "description": "A dexcom integrated discord bot for a single user.",
   "main": "index.js",
@@ -17,6 +16,7 @@
   "dependencies": {
     "@babel/cli": "^7.14.5",
     "@babel/core": "^7.14.6",
+    "@babel/plugin-transform-runtime": "^7.14.5",
     "@babel/preset-env": "^7.14.7",
     "discord.js": "^12.5.3",
     "winston": "^3.3.3"
