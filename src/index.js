@@ -8,6 +8,7 @@ const client = new Client();
 client.commands = new Collection();
 const token = config.bot.token;
 const botId = config.bot.id
+const prefix = 'db!';
 
 
 //command import
@@ -24,7 +25,6 @@ for (const file of commandFiles) {
 // Message reception & command routing logic
 client.once('ready', () =>{
     //Initial login execution
-    db.initialize();
     log.info('Client#ready -> Ready!');
 });
 
@@ -33,8 +33,6 @@ client.on('message', async (message) =>{
 	if(message.author.bot == true){return;}
   //const message = {content: 'nb!setchannel', guild:{id:731352346449149963}}
 	const guild = message.guild.id;
-	const configDb = new ConfigDb(guild);
-	const prefix = await configDb.getPrefix();
 
   const prefixSubtr = message.content.substring(0, prefix.length);
   if( (prefixSubtr != prefix) || (message.author.id == botId) ){return;}
