@@ -1,6 +1,6 @@
 {
   "name": "diabotes",
-  "type":module,
+  "type": "module",
   "version": "1.0.0",
   "description": "A dexcom integrated discord bot for a single user.",
   "main": "index.js",
