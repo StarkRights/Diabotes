@@ -1,0 +1,26 @@
+{
+  "name": "diabotes",
+  "version": "1.0.0",
+  "description": "A dexcom integrated discord bot for a single user.",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src -d build",
+    "run": "node build/index.js",
+    "demon": "nodemon --ignore ./build --exec npm start",
+    "start": "babel src -d build && npm run run",
+    "clean": "rm -rf `find build -mindepth 1 | grep -v 'getkeep$'`",
+    "test": "npm run clean && npm run build && mocha build/tests/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "discord.js": "^12.5.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-plugin-import": "^2.23.4"
+  }
+}
