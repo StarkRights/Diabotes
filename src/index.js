@@ -3,6 +3,7 @@ import config from './config.js'
 import fs from 'fs'
 import log from './utils/log'
 import {join} from 'path'
+import {Authenticator} from './utils/OAuth'
 
 const client = new Client();
 client.commands = new Collection();
@@ -10,6 +11,12 @@ const token = config.bot.token;
 const botId = config.bot.id
 const prefix = 'db!';
 
+const dexID = config.dexcom.id;
+const dexSecret = config.dexcom.secret;
+const dexURL = config.dexcom.url;
+const authCode = config.dexcom.authCode;
+
+const authy = new Authenticator(dexURL, dexID, dexSecret, authCode);
 
 //command import
 const commandFiles = fs.readdirSync(join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
@@ -23,9 +30,12 @@ for (const file of commandFiles) {
 
 
 // Message reception & command routing logic
-client.once('ready', () =>{
+client.once('ready', async () =>{
     //Initial login execution
     log.info('Client#ready -> Ready!');
+
+    authy.getAccessToken();
+
 });
 
 
