@@ -1,13 +1,14 @@
 {
   "name": "diabotes",
   "version": "1.0.0",
+  "type":"module",
   "description": "A dexcom integrated discord bot for a single user.",
   "main": "index.js",
   "scripts": {
     "build": "babel src -d build",
     "run": "node build/index.js",
-    "demon": "nodemon --ignore ./build --exec npm start",
-    "start": "babel src -d build && npm run run",
+    "demon": "nodemon --exec npm start",
+    "start": "node --experimental-specifier-resolution=node --experimental-modules --experimental-json-modules src/index.js ",
     "clean": "rm -rf `find build -mindepth 1 | grep -v 'getkeep$'`",
     "test": "npm run clean && npm run build && mocha build/tests/*.js"
   },

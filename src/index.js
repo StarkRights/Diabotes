@@ -1,9 +1,13 @@
 import {Message, Client, Collection} from 'discord.js'
-import config from './config.js'
+import config from './config'
 import fs from 'fs'
 import log from './utils/log'
 import {join} from 'path'
 import {Authenticator} from './utils/OAuth'
+// A bit of necessary magic since we're bable-less. __dirname doesn't exist in ES Scope.
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const client = new Client();
 client.commands = new Collection();
@@ -21,7 +25,7 @@ const authy = new Authenticator(dexURL, dexID, dexSecret, authCode);
 //command import
 const commandFiles = fs.readdirSync(join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
+	const command = import(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
 
