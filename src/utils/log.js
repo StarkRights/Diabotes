@@ -12,9 +12,10 @@ const log = createLogger({
             info: 'green',
             warn: 'yellow',
             error: 'red',
+            discord:'purple',
         }),
         label({
-            label: 'Modpack Index Bot',
+            label: 'Diabotes',
         }),
         timestamp(),
         printf(({ level, message, label, timestamp}) => {
