@@ -54,7 +54,7 @@ client.once('ready', async () =>{
 			const response = await fetch(this.baseURL+'users/self/egvs', options);
 			client.user.setActivity(`Stark is ${response.egvs[0].value}`);
 		}
-		setInterval(updateRich(), 300000);
+		setInterval(updateRich, 300000);
 
 });
 
