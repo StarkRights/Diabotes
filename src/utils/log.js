@@ -12,7 +12,6 @@ const log = createLogger({
             info: 'green',
             warn: 'yellow',
             error: 'red',
-            discord:'purple',
         }),
         label({
             label: 'Diabotes',
@@ -24,8 +23,8 @@ const log = createLogger({
     ),
     levels: {
         debug: 4,
-        verbose: 3,
-        info: 2,
+        info: 3,
+        verbose: 2,
         warn: 1,
         error: 0,
     },

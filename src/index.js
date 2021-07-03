@@ -1,9 +1,9 @@
-import {Message, Client, Collection} from 'discord.js'
+import {Message, Client, Collection, User} from 'discord.js'
 import config from './config'
 import fs from 'fs'
 import log from './utils/log'
 import {join} from 'path'
-import {Authenticator} from './utils/OAuth'
+import Authenticator from './utils/OAuth'
 // A bit of necessary magic since we're bable-less. __dirname doesn't exist in ES Scope.
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,17 +15,12 @@ const token = config.bot.token;
 const botId = config.bot.id
 const prefix = 'db!';
 
-const dexID = config.dexcom.id;
-const dexSecret = config.dexcom.secret;
-const dexURL = config.dexcom.url;
-const authCode = config.dexcom.authCode;
-
-const authy = new Authenticator(dexURL, dexID, dexSecret, authCode);
+const authy = new Authenticator();
 
 //command import
 const commandFiles = fs.readdirSync(join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
-	const command = await  import(`./commands/${file}`);
+	const command = await import(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
 
@@ -38,7 +33,26 @@ client.once('ready', async () =>{
     //Initial login execution
     log.info('Client#ready -> Ready!');
 
-    authy.getAccessToken();
+		function updateRich(){
+			const starkUser = client.users.fetch(starkId);
+			const authToken = await Authenticator.getAccessToken(starkUser);
+			const isoDate = new Date().toISOString();
+		  const oldIsoDate = new Date(Date.now()-900000);
+			const options = {
+		      // These properties are part of the Fetch Standard
+		      method: 'POST',
+		      headers: {
+		        authorization: `Bearer ${authToken}`
+		      },
+		      body: {
+		        startDate: oldIsoDate,
+		        endDate: isoDate,
+		      }
+		  };
+			const response = await fetch(this.baseURL+'users/self/egvs', options);
+		  client.user.setActivity(`Stark is ${response.egvs[0].value}`);
+		}
+		setInterval(updateRich(), 300000);
 
 });
 
@@ -62,7 +76,7 @@ client.on('message', async (message) =>{
   //console.log(`cmd: ${command}`);
 
   try{
-    client.commands.get(command).execute(message, msgArray);
+    client.commands.get(command).execute(message, client);
   } catch(e){
     log.error(e);
   }
