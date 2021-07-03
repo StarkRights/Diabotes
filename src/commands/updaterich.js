@@ -2,8 +2,9 @@ import Authenticator from '../utils/OAuth'
 
 const name = 'updaterich';
 async function execute(message, client){
+  const authy = new Authenticator();
   const starkUser = message.author;
-  const authToken = await Authenticator.getAccessToken(starkUser);
+  const authToken = await authy.getAccessToken(starkUser);
   const isoDate = new Date().toISOString();
   const oldIsoDate = new Date(Date.now()-900000);
   const options = {
