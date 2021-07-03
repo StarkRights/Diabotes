@@ -59,21 +59,20 @@ class Authenticator {
 
   async getAuthURL(user){
     //associate a nonce with the user in DB for later validation
-    const state = nonce.getNonce();
-    const userDoc = await User.findById(user.id);
+    const state = Math.floor(Math.random()*2147483600);
+    const userDoc = await UserDB.findById(user.id);
     userDoc.state = state;
     await userDoc.save;
 
 
-    const authURL = this.baseURL+`login?client_id=${this.id}&redirect_uri=${this.redirect}&response_type=code&scope=offline_access&state=${state}`;
+    const authURL = this.baseURL+`oauth2/login?client_id=${this.id}&redirect_uri=${this.redirect}&response_type=code&scope=offline_access&state=${state}`;
     return authURL;
   }
 
   async promptUser(user){
-    log.info(`InPromptUser`)
     const authURL = this.getAuthURL(user);
     const userDM = await user.createDM()
-    userDM.send(`Please use the following link to authenticate with Dexcom & provide us access to your data : \`${authURL}\``);
+    userDM.send(`Please use the following link to authenticate with Dexcom & provide us access to your data : \`${await authURL}\``);
   }
 
 
