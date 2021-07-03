@@ -1,8 +1,6 @@
 import Authenticator from '../utils/OAuth'
 
-
-export {name, execute}
-const name = 'updateRich';
+const name = 'updaterich';
 async function execute(message, client){
   const starkUser = message.author;
   const authToken = await Authenticator.getAccessToken(starkUser);
@@ -22,3 +20,5 @@ async function execute(message, client){
   const response = await fetch(this.baseURL+'users/self/egvs', options);
   client.user.setActivity(`Stark is ${response.egvs[0].value}`);
 }
+
+export {name, execute}

@@ -20,10 +20,10 @@ const authy = new Authenticator();
 //command import
 const commandFiles = fs.readdirSync(join(__dirname, 'commands')).filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
-	async () =>{
-		const command = await import(`./commands/${file}`);
+	(async () => {
+		const command = await import(`./commands/${file}`)
 		client.commands.set(command.name, command);
-  }
+  })();
 }
 
 

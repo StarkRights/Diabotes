@@ -3,7 +3,7 @@ import log from '../utils/log'
 import Authenticator from '../utils/OAuth'
 import {UserDB} from '../utils/mongo'
 
-export {name, execute}
+
 const name = 'authme';
 async function execute(message, messageArray){
   const auth = new Authenticator();
@@ -21,3 +21,5 @@ async function execute(message, messageArray){
       log.error(`${e} \nFrom ${message.url}`);
     });
 }
+
+export {name, execute}
