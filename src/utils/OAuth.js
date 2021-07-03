@@ -6,7 +6,6 @@ import config from '../config'
 import {Database, UserDB} from './mongo'
 import nonce from 'get-nonce'
 
-const database = new Database();
 
 const dexID = config.dexcom.id;
 const dexSecret = config.dexcom.secret;
