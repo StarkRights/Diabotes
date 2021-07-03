@@ -37,7 +37,7 @@ client.once('ready', async () =>{
 		const starkId = config.starkId;
 		async function updateRich(){
 			const starkUser = client.users.fetch(starkId);
-			const authToken = await Authenticator.getAccessToken(starkUser);
+			const authToken = await authy.getAccessToken(starkUser);
 			const isoDate = new Date().toISOString();
 			const oldIsoDate = new Date(Date.now()-900000);
 			const options = {
