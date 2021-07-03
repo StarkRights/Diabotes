@@ -9,7 +9,7 @@
     "run": "node build/index.js",
     "demon": "nodemon --exec npm start",
     "start": "node --experimental-specifier-resolution=node --experimental-modules --experimental-json-modules --trace-warnings src/index.js ",
-	"startAuth": "node --experimental-specifier-resolution=node --experimental-modules --experimental-json-modules --trace-warnings src/authserver.js "
+	"startAuth": "node --experimental-specifier-resolution=node --experimental-modules --experimental-json-modules --trace-warnings src/authserver.js ",
     "clean": "rm -rf `find build -mindepth 1 | grep -v 'getkeep$'`",
     "test": "npm run clean && npm run build && mocha build/tests/*.js"
   },
