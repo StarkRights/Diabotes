@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema({
     expires: Date
   },
   state: String
-});
+},
+{collection: 'Users'});
 
 const UserDB = mongoose.model('User', userSchema);
 

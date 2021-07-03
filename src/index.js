@@ -4,6 +4,7 @@ import fs from 'fs'
 import log from './utils/log'
 import {join} from 'path'
 import Authenticator from './utils/OAuth'
+import fetch from 'node-fetch'
 // A bit of necessary magic since we're bable-less. __dirname doesn't exist in ES Scope.
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -36,23 +37,24 @@ client.once('ready', async () =>{
     log.info('Client#ready -> Ready!');
 		const starkId = config.starkId;
 		async function updateRich(){
-			const starkUser = client.users.fetch(starkId);
-			const authToken = await authy.getAccessToken(starkUser);
-			const isoDate = new Date().toISOString();
-			const oldIsoDate = new Date(Date.now()-900000);
+			const starkUser = await client.users.fetch(starkId);
+			//const authToken = await authy.getAccessToken(starkUser);
+			const isoDate = new Date().toISOString().substring(0,18);
+			const oldIsoDate = new Date(Date.now()-86400000).toISOString().substring(0,18);
 			const options = {
 					// These properties are part of the Fetch Standard
-					method: 'POST',
+					method: 'GET',
 					headers: {
-						authorization: `Bearer ${authToken}`
+						//authorization: `Bearer ${authToken}`
+						accept: 'application/json',
+						api_secret: config.nightscout.token
 					},
-					body: {
-						startDate: oldIsoDate,
-						endDate: isoDate,
-					}
 			};
-			const response = await fetch(this.baseURL+'users/self/egvs', options);
-			client.user.setActivity(`Stark is ${response.egvs[0].value}`);
+			//const response = await fetch(config.dexcom.url+`users/self/egvs?startDate=${oldIsoDate}&endDate=${isoDate}`, options);
+			const response = await fetch(`http://cgm-itc.herokuapp.com/api/v1/entries?token=${config.nightscout.token}&count=1`, options)
+			const json = await response.json();
+			//client.user.setActivity(`Stark is ${json.egvs[0].value}`);
+			client.user.setActivity(`Stark is ${json[0].sgv}`)
 		}
 		setInterval(updateRich, 300000);
 

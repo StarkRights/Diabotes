@@ -35,17 +35,23 @@ class Authenticator {
    */
   async getAccessToken(user){
     //check db for existing tokens
-    const userDoc = await UserDB.findById(user.id);
-    const hasUserToken = (userDoc.accessToken.token != null);
-    if(hasUserToken){
 
+    const userDoc = await UserDB.findById(user.id).exec();
+
+    const hasUserToken = (userDoc.accessToken.token != null);
+
+    if(hasUserToken){
       //consider the token expired if it's < 5 seconds before it really expires
       const tokenIsExpired = (userDoc.accessToken.expires.getTime() / 1000 - Date.now() / 1000) < 5;
       if(!tokenIsExpired){
+        console.log(`token isnt expired`)
         return userDoc.accessToken.token;
       } else if (tokenIsExpired){
-        return this.refreshAuthToken();
+        console.log(`token IS expired`)
+        return this.refreshAuthToken(user);
       }
+    } else if(!hasUserToken){
+      //do stuff
     }
   }
 
@@ -59,7 +65,7 @@ class Authenticator {
   async getAuthURL(user){
     //associate a nonce with the user in DB for later validation
     const state = Math.floor(Math.random()*2147483600);
-    const userDoc = await UserDB.findById(user.id);
+    const userDoc = await UserDB.findById(user.id).exec();
     userDoc.state = state;
     await userDoc.save;
 
@@ -101,7 +107,7 @@ class Authenticator {
   }
 
   async refreshAuthToken(user){
-    const userDoc = await UserDB.findById(user.id);
+    const userDoc = await UserDB.findById(user.id).exec();
     const refreshToken = userDoc.refreshToken.token;
     const options = {
         // These properties are part of the Fetch Standard
@@ -118,9 +124,11 @@ class Authenticator {
         }
     };
     const response = await fetch(this.baseURL+'oauth2/token', options);
-    userDoc.accessToken.token = response.query.access_token;
-    userDoc.accessToken.expires = new Date(Date.now() + response.query.expires_in);
-    userDoc.refreshToken.token = response.query.refresh_token;
+    const json = await response.json();
+    userDoc.accessToken.token = json.access_token;
+    //THIS IS BROKEN
+    userDoc.accessToken.expires = new Date(Date.now() + json.expires_in);
+    userDoc.refreshToken.token = json.refresh_token;
     await userDoc.save();
 
     return response.query.access_token;
