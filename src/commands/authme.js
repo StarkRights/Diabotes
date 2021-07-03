@@ -18,7 +18,7 @@ async function execute(message, messageArray){
   auth.promptUser(message.author)
     .catch(e => {
       //later convert to usermessaged error
-      log.error(`${e} \nFrom ${message.url}`);
+      log.error(`CMD:Authme -> PromptError | ${e} \nFrom ${message.url}`);
     });
 }
 

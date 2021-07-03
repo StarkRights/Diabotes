@@ -1,4 +1,5 @@
 import log from './log'
+import {User} from 'discord.js'
 import fetch from 'node-fetch'
 import express from 'express'
 import config from '../config'
@@ -59,7 +60,7 @@ class Authenticator {
   async getAuthURL(user){
     //associate a nonce with the user in DB for later validation
     const state = nonce.getNonce();
-    const userDoc = await database.getUser(user.id);
+    const userDoc = await User.findById(user.id);
     userDoc.state = state;
     await userDoc.save;
 
@@ -71,7 +72,8 @@ class Authenticator {
   async promptUser(user){
     log.info(`InPromptUser`)
     const authURL = this.getAuthURL(user);
-    await user.createDM().send(`Please use the following link to authenticate with Dexcom & provide us access to your data : \`${authURL}\``);
+    const userDM = await user.createDM()
+    userDM.send(`Please use the following link to authenticate with Dexcom & provide us access to your data : \`${authURL}\``);
   }
 
 
