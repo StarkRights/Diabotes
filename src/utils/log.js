@@ -3,7 +3,7 @@ import winston from 'winston';
 const {createLogger, format, transports} = winston;
 const { label, combine, timestamp, printf, colorize } = format;
 
-const log = createLogger({
+  const log = createLogger({
     level: 'info',
     format: combine(
         colorize({
@@ -14,7 +14,7 @@ const log = createLogger({
             error: 'red',
         }),
         label({
-            label: 'Diabotes',
+            label: `Diabotes`,
         }),
         timestamp(),
         printf(({ level, message, label, timestamp}) => {
@@ -31,6 +31,5 @@ const log = createLogger({
     transports: [
         new transports.Console()
     ]
-});
-
+  });
 export default log;

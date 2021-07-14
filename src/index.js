@@ -2,11 +2,10 @@ import {Message, Client, Collection, User} from 'discord.js'
 import config from './config'
 import fs from 'fs'
 import log from './utils/log'
-import {join} from 'path'
+import {join, dirname} from 'path'
 import Authenticator from './utils/OAuth'
 import fetch from 'node-fetch'
 // A bit of necessary magic since we're bable-less. __dirname doesn't exist in ES Scope.
-import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
