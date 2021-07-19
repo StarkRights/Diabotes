@@ -46,7 +46,6 @@ client.once('ready', async () =>{
 					headers: {
 						//authorization: `Bearer ${authToken}`
 						accept: 'application/json',
-						api_secret: config.nightscout.token
 					},
 			};
 			//const response = await fetch(config.dexcom.url+`users/self/egvs?startDate=${oldIsoDate}&endDate=${isoDate}`, options);

@@ -15,11 +15,10 @@ async function execute(message, client){
       headers: {
         //authorization: `Bearer ${authToken}`
         accept: 'application/json',
-        api_secret: config.nightscout.token
       },
   };
   //const response = await fetch(config.dexcom.url+`users/self/egvs?startDate=${oldIsoDate}&endDate=${isoDate}`, options);
-  const response = await fetch(`http://cgm-itc.herokuapp.com/api/v1/entries?token=${config.nightscout.token}&count=1`, options)
+  const response = await fetch(`${config.nightscout.url}/api/v1/entries?token=${config.nightscout.token}&count=1`, options)
   const json = await response.json();
   //client.user.setActivity(`Stark is ${json.egvs[0].value}`);
   client.user.setActivity(`Stark is ${json[0].sgv}`)
