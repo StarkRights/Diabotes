@@ -17,15 +17,16 @@ async function execute(message, client){
         accept: 'application/json',
       },
   };
-  //const response = await fetch(config.dexcom.url+`users/self/egvs?startDate=${oldIsoDate}&endDate=${isoDate}`, options);
-  const thirtyMinutes = 1000*60*30;
-  const elapsedTime = Date.now() - Date.parse(json[0].date);
-  if( elapsedTime >= thirtyMinutes  ){
-    client.user.setActivity(`Stale Data:${json[0].sgv} (${elapsedTime/(1000*60)} minutes old)`);
-    return;
-  }
   const response = await fetch(`${config.nightscout.url}/api/v1/entries?token=${config.nightscout.token}&count=1`, options)
   const json = await response.json();
+  //const response = await fetch(config.dexcom.url+`users/self/egvs?startDate=${oldIsoDate}&endDate=${isoDate}`, options);
+  const thirtyMinutes = 1000*60*30;
+  const elapsedTime = Date.now() - Date.parse(json[0].dateString);
+  if( elapsedTime >= thirtyMinutes  ){
+    client.user.setActivity(`Stale Data: ${json[0].sgv}mg/dL | (${Math.round(elapsedTime/(1000*60))} minutes old)`);
+    return;
+  }
+
   //client.user.setActivity(`Stark is ${json.egvs[0].value}`);
   client.user.setActivity(`Stark is ${json[0].sgv}`)
 }
