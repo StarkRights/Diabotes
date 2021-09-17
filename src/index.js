@@ -50,6 +50,12 @@ client.once('ready', async () =>{
 			};
 			//const response = await fetch(config.dexcom.url+`users/self/egvs?startDate=${oldIsoDate}&endDate=${isoDate}`, options);
 			const response = await fetch(`${config.nightscout.url}/api/v1/entries?token=${config.nightscout.token}&count=1`, options)
+				.catch((e) => {
+					log.error(`updateRich#APIFetchError -> ${e}`);
+
+				});
+
+			//ToDo: Validate data & log errors
 			const json = await response.json();
 			const thirtyMinutes = 1000*60*30;
 			const elapsedTime = Date.now() - Date.parse(json[0].dateString);
