@@ -52,8 +52,10 @@ client.once('ready', async () =>{
 			const response = await fetch(`${config.nightscout.url}/api/v1/entries?token=${config.nightscout.token}&count=1`, options)
 				.catch((e) => {
 					log.error(`updateRich#APIFetchError -> ${e}`);
-
+					client.user.setActivity(`No Data - API Error`);
+					return;
 				});
+
 
 			//ToDo: Validate data & log errors
 			const json = await response.json();
@@ -61,10 +63,12 @@ client.once('ready', async () =>{
 			const elapsedTime = Date.now() - Date.parse(json[0].dateString);
 			if( elapsedTime >= thirtyMinutes  ){
 				client.user.setActivity(`Stale Data: ${json[0].sgv}mg/dL | (${Math.round(elapsedTime/(1000*60))} minutes old)`);
+				log.info(`UpdateRich#staleUpdate -> Updated with stale data`);
 				return;
 			}
 			//client.user.setActivity(`Stark is ${json.egvs[0].value}`);
 			client.user.setActivity(`Stark is ${json[0].sgv}`);
+			log.info(`UpdateRich#update -> Updated with new data.`);
 		}
 		setInterval(updateRich, 300000);
 
